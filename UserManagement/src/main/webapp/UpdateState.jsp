@@ -21,11 +21,36 @@
     <meta charset="UTF-8">
     <title>Edit State</title>
     <style>
-        body { font-family: Arial; background: #f5f7fa; }
-        .container { width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 8px; margin: 8px 0; }
-        button { background: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; }
-        h2 { text-align: center; }
+        body { 
+        font-family: Arial;
+        background: #f5f7fa; 
+        }
+        .container { 
+        width: 400px; 
+        margin: 50px auto;
+         background: white; 
+         padding: 20px; 
+         border-radius: 10px;
+         box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+         margin-top:100px;
+         }
+        input { 
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+         }
+        button { 
+        background: #28a745;
+         color: white; 
+         border: none; 
+         
+         padding: 10px; 
+         width: 100%; 
+         border-radius: 5px;
+          }
+        h2 { 
+        text-align: center; 
+        }
         .edit{
         background: green;
          padding:5px;
@@ -39,6 +64,7 @@
     </style>
 </head>
 <body>
+<jsp:include page="Sidebar.jsp" />
 <div class="container">
     <h2 class="edit">Edit State</h2> 
     <a href="StateList.jsp" class="back">← Back to List</a>

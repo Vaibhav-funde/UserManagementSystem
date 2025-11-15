@@ -6,24 +6,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.Db.DbConnection;
 import com.Model.City;
 
-
 public class Citydbo {
 
-	public boolean addCity(String name, int sid) throws SQLException {
+    // Add city only if it does not exist for the given state
+    public boolean addCity(String name, int sid) throws SQLException {
+        if (isCityExists(name, sid)) {
+            return false; // City already exists for this state
+        }
+
         String sql = "INSERT INTO CITY (CID, CNAME, SID) VALUES (CITY_SEQ.NEXTVAL, ?, ?)";
         try (Connection con = DbConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setInt(2, sid);
             ps.executeUpdate();
+            return true;
         }
-		return false;
     }
 
+    // Update city
     public void updateCity(int cid, String name, int sid) throws SQLException {
         String sql = "UPDATE CITY SET CNAME=?, SID=? WHERE CID=?";
         try (Connection con = DbConnection.getConnection();
@@ -35,6 +39,7 @@ public class Citydbo {
         }
     }
 
+    // Delete city
     public void deleteCity(int cid) throws SQLException {
         String sql = "DELETE FROM CITY WHERE CID=?";
         try (Connection con = DbConnection.getConnection();
@@ -43,45 +48,44 @@ public class Citydbo {
             ps.executeUpdate();
         }
     }
-    
-    public List<City> getCitiesByState(int sid) {
-        List<City> list = new ArrayList<>();
-        String sql = "SELECT * FROM city WHERE sid = ? ORDER BY cname";
 
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    // Check if city already exists for a state
+    public boolean isCityExists(String name, int sid) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM CITY WHERE CNAME=? AND SID=?";
+        try (Connection con = DbConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setInt(2, sid);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
+    // Get all cities for a state
+    public List<City> getCitiesByState(int sid) throws SQLException {
+        List<City> list = new ArrayList<>();
+        String sql = "SELECT * FROM CITY WHERE SID=? ORDER BY CNAME";
+        try (Connection con = DbConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, sid);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 City c = new City();
-                c.setCid(rs.getInt("cid"));
-                c.setCname(rs.getString("cname"));
-                c.setSid(rs.getInt("sid"));
+                c.setCid(rs.getInt("CID"));
+                c.setCname(rs.getString("CNAME"));
+                c.setSid(rs.getInt("SID"));
                 list.add(c);
             }
-        } catch (Exception e) { e.printStackTrace(); }
-        return list;
-    }
-    
-    public List<City> getCitiesByStateId(int sid) throws SQLException {
-        List<City> list = new ArrayList<>();
-        Connection con = DbConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement("SELECT * FROM city WHERE sid = ?");
-        ps.setInt(1, sid);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            City c = new City();
-            c.setCid(rs.getInt("cid"));
-            c.setCname(rs.getString("cname"));
-            c.setSid(rs.getInt("sid"));
-            list.add(c);
         }
         return list;
     }
+
     public City getCityById(int cid) throws SQLException {
         City city = null;
-        String sql = "SELECT * FROM CITY WHERE CID = ?";
+        String sql = "SELECT * FROM CITY WHERE CID=?";
         try (Connection con = DbConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, cid);
@@ -95,6 +99,22 @@ public class Citydbo {
         }
         return city;
     }
-
+    public List<City> getCitiesByStateId(int sid) throws SQLException {
+        List<City> list = new ArrayList<>();
+        String sql = "SELECT * FROM CITY WHERE SID = ?";
+        try (Connection con = DbConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, sid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                City c = new City();
+                c.setCid(rs.getInt("CID"));
+                c.setCname(rs.getString("CNAME"));
+                c.setSid(rs.getInt("SID"));
+                list.add(c);
+            }
+        }
+        return list;
+    }
 
 }

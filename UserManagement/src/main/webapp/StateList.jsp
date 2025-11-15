@@ -2,14 +2,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    // 🧠 Check login session
     String email = (String) session.getAttribute("email");
     if (email == null) {
         response.sendRedirect("login.jsp");
         return;
     }
 
-    // 🔹 Fetch all states
     StateDbo sdb = new StateDbo();
     List<State> stateList = sdb.getAllStates();
 %>
@@ -19,118 +17,164 @@
 <head>
 <meta charset="UTF-8">
 <title>State List</title>
+
 <style>
-    body { 
-        font-family: Arial, sans-serif; 
-        background-color: #f5f7fa; 
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #eef1f5;
+        margin: 0;
+        padding: 0;
     }
 
-    .container { 
-        width: 80%; 
-        margin: 50px auto; 
-        background-color: #fff; 
-        padding: 20px; 
-        border-radius: 10px; 
-        box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+    /* PAGE CONTENT (RIGHT SIDE) */
+    .content-box {
+        margin-left: 260px;
+        margin-top: 60px;
+        padding: 25px;
     }
 
-    h2 { 
-        text-align: center; 
-        color: #333; 
-        margin-bottom: 20px; 
+    /* OUTER CARD BOX LIKE DASHBOARD */
+    .card {
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        border: 2px solid #cce0ff; 
     }
 
-    table { 
-        width: 100%; 
-        border-collapse: collapse; 
+    /* PAGE TITLE BAR */
+    .title-bar {
+        background: green;
+        color: white;
+        text-align: center;
+        padding: 12px;
+        font-size: 22px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        letter-spacing: 1px;
+        font-weight: bold;
     }
 
-    th, td { 
-        padding: 10px; 
-        border-bottom: 1px solid #ddd; 
-        text-align: center; 
-    }
-
-    th { 
-        background-color: #007bff; 
-        color: white; 
-    }
-
-    a.btn { 
-        text-decoration: none; 
-        padding: 6px 12px; 
-        border-radius: 5px; 
-        color: white; 
-        margin: 2px; 
-        display: inline-block; 
-    }
-
-    a.edit { background-color: #28a745; }
-    a.delete { background-color: #dc3545; }
-    a.city { background-color: #17a2b8; }
-    a.add { 
-        background-color: #007bff; 
-        padding: 8px 15px; 
-        display: inline-block; 
-        margin-bottom: 15px; 
-        border-radius: 5px;
+    /* TOP BUTTONS */
+    .btn-top {
+        background-color: #007bff;
+        padding: 10px 18px;
+        border-radius: 6px;
         color: white;
         text-decoration: none;
+        font-size: 15px;
+        margin-right: 10px;
+        display: inline-block;
     }
-    .state{
-    color:White;
-    background-color: green; 
-    padding:5px;
+    .btn-top:hover { background-color: #0056b3; }
+
+    /* TABLE STYLE */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 18px;
+        border-radius: 6px;
+        overflow: hidden;
     }
 
-    a.add:hover, a.btn:hover { opacity: 0.8; }
+    th {
+        background-color: #007bff;
+        color: white;
+        padding: 12px;
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+    }
+
+    td {
+        padding: 12px;
+        text-align: center;
+        background: white;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 15px;
+    }
+
+    tr:hover td {
+        background-color: #f1f9ff;
+    }
+
+    /* ACTION BUTTONS */
+    .btn {
+        padding: 8px 14px;
+        border-radius: 6px;
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+        margin: 2px;
+        display: inline-block;
+    }
+    .edit { background-color: #28a745; }
+    .edit:hover { background-color: #1d7e33; }
+
+    .delete { background-color: #dc3545; }
+    .delete:hover { background-color: #b42533; }
+
+    .city { background-color: #17a2b8; }
+    .city:hover { background-color: #0f7282; }
+
 </style>
 </head>
+
 <body>
-<div class="container">
-    <h2 class="state">State List</h2>
 
-    <!-- Top buttons -->
-    <a href="AddState.jsp" class="add">➕ Add New State</a>
-    <a href="Index.html" class="add">🏠 Menu</a>
+<jsp:include page="Sidebar.jsp" />
 
-    <table>
-        <thead>
-            <tr>
-                <th>Sr No</th>
-                <th>State ID</th>
-                <th>State Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        <%
-            int serial = 1;
-            if (stateList != null && !stateList.isEmpty()) {
-                for (State s : stateList) {
-        %>
-            <tr>
-                <td><%= serial++ %></td>
-                <td><%= s.getSid() %></td>
-                <td><%= s.getSname() %></td>
-                <td>
-                    <a href="UpdateState.jsp?sid=<%= s.getSid() %>" class="btn edit">State Edit</a>
-                    <a href="DeleteStateServlet?sid=<%= s.getSid() %>" class="btn delete" onclick="return confirm('Are you sure you want to delete this state?');"> State Delete</a>
-                    <a href="CityList.jsp?sid=<%= s.getSid() %>" class="btn city">View Cities</a>
-                </td>
-            </tr>
-        <%
+<div class="content-box">
+    <div class="card">
+        
+        <div class="title-bar">State List</div>
+
+        <!-- BUTTONS -->
+        <a href="AddState.jsp" class="btn-top">➕ Add New State</a>
+        <a href="Index.jsp" class="btn-top">🏠 Menu</a>
+
+        <!-- TABLE -->
+        <table>
+            <thead>
+                <tr>
+                    <th>SR NO</th>
+                    <th>STATE ID</th>
+                    <th>STATE NAME</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            <%
+                int sr = 1;
+                if (stateList != null && !stateList.isEmpty()) {
+                    for (State s : stateList) {
+            %>
+                <tr>
+                    <td><%= sr++ %></td>
+                    <td><%= s.getSid() %></td>
+                    <td><%= s.getSname() %></td>
+                    <td>
+                        <a href="UpdateState.jsp?sid=<%= s.getSid() %>" class="btn edit">State Edit</a>
+                        <a href="DeleteStateServlet?sid=<%= s.getSid() %>" class="btn delete" onclick="return confirm('Delete this state?');">State Delete</a>
+                        <a href="CityList.jsp?sid=<%= s.getSid() %>" class="btn city">View Cities</a>
+                    </td>
+                </tr>
+            <%
+                    }
+                } else {
+            %>
+                <tr>
+                    <td colspan="4">No State Found</td>
+                </tr>
+            <%
                 }
-            } else {
-        %>
-            <tr>
-                <td colspan="4" style="text-align:center;">No State Found</td>
-            </tr>
-        <%
-            }
-        %>
-        </tbody>
-    </table>
+            %>
+            </tbody>
+        </table>
+
+    </div>
 </div>
+
 </body>
 </html>

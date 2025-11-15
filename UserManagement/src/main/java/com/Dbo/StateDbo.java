@@ -85,4 +85,17 @@ public class StateDbo {
         }
         return state;
     }
+    public boolean isStateExists(String sname) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM STATE WHERE SNAME = ?"; // Correct table name
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, sname);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // state exists if count > 0
+            }
+        }
+        return false;
+    }
+
 }

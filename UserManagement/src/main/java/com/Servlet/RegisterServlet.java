@@ -3,6 +3,7 @@ package com.Servlet;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +19,6 @@ public class RegisterServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        // Redirect GET requests to register page
         response.sendRedirect("Register.jsp");
     }
 
@@ -40,7 +40,33 @@ public class RegisterServlet extends HttpServlet {
 
         try (Connection conn = DbConnection.getConnection()) {
 
-            String sql = "INSERT INTO users (NAME, EMAIL, MOBILE, PASSWORD, SID, CID) VALUES (?, ?, ?, ?, ?, ?)";
+            // Check if email already exists
+            String checkEmailSql = "SELECT EMAIL FROM USERS WHERE EMAIL = ?";
+            PreparedStatement checkPs = conn.prepareStatement(checkEmailSql);
+            checkPs.setString(1, email);
+            ResultSet rs = checkPs.executeQuery();
+
+            if (rs.next()) {
+                // Email already exists
+                request.setAttribute("error", "Email already registered! Try a different email.");
+                request.getRequestDispatcher("Register.jsp").forward(request, response);
+                return;
+            }
+
+            // ✅ 2️⃣ Check if password already exists
+            String checkPasswordSql = "SELECT PASSWORD FROM USERS WHERE PASSWORD = ?";
+            try (PreparedStatement checkPassPs = conn.prepareStatement(checkPasswordSql)) {
+                checkPassPs.setString(1, password);
+                ResultSet rsPass = checkPassPs.executeQuery();
+                if (rsPass.next()) {
+                    request.setAttribute("error", "Password already used! Please choose a different one.");
+                    request.getRequestDispatcher("Register.jsp").forward(request, response);
+                    return;
+                }
+            }
+            
+            // Insert new user
+            String sql = "INSERT INTO USERS (NAME, EMAIL, MOBILE, PASSWORD, SID, CID) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, name);
             ps.setString(2, email);
@@ -52,8 +78,8 @@ public class RegisterServlet extends HttpServlet {
             int result = ps.executeUpdate();
 
             if (result > 0) {
-                // Registration successful, redirect to login page
-                response.sendRedirect("Index.html");
+                // Registration successful
+                response.sendRedirect("Index.jsp");
             } else {
                 response.getWriter().println("Registration failed! Please try again.");
             }

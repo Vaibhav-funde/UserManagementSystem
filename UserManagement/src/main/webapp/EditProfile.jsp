@@ -5,21 +5,63 @@
     <meta charset="UTF-8">
     <title>Edit Profile</title>
     <style>
-        body { font-family: Arial; background: #f5f7fa; }
-        .container { width: 600px; margin: 40px auto; background: white; padding: 20px; border-radius: 10px; }
-        input, select { width: 100%; padding: 8px; margin: 8px 0; }
-        img { max-width: 100px; margin-top: 8px; display: block; }
-        a.view-doc { display: block; margin-top: 4px; color: blue; text-decoration: underline; }
-        button, .btn { background: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; text-align: center; text-decoration: none; display: inline-block; margin-top: 10px; }
-        .top-menu { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .top-menu h2 { margin: 0; }
+        body {
+         font-family: Arial;
+         background: #f5f7fa;
+         }
+        .container { 
+        width: 600px; 
+        margin: 40px auto;
+        background: white;
+         padding: 20px;
+         border-radius: 10px;
+         margin-top:80px;
+         }
+        input, select {
+         width: 100%; 
+         padding: 8px;
+          margin: 8px 0;
+           }
+        img {
+         max-width: 100px;
+         margin-top: 8px;
+          display: block;
+           }
+        a.view-doc { 
+        display: block;
+         margin-top: 4px;
+          color: blue; 
+          text-decoration: underline; 
+          }
+        button, .btn { 
+        background: #28a745;
+         color: white;
+          border: none;
+           padding: 10px; 
+           width: 100%; 
+           border-radius: 5px;
+            text-align: center;
+           text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+             }
+        .top-menu {
+         display: flex;
+          justify-content: space-between;
+           align-items: center;
+           margin-bottom: 20px;
+            }
+        .top-menu h2 { 
+        margin: 0;
+}
     </style>
 </head>
 <body>
+<jsp:include page="Sidebar.jsp" />
 <div class="container">
     <div class="top-menu">
         <h2>Edit Profile</h2>
-        <a href="DashboardServlet" class="btn" style="width:auto; padding:8px 15px;">Dashboard</a>
+       
     </div>
 
     <form action="EditProfileServlet" method="post" enctype="multipart/form-data">

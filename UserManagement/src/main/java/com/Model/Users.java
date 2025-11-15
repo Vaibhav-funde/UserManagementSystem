@@ -11,10 +11,17 @@ public class Users {
 	    private int cityId;
 	    private String stateName; 
 	    private String cityName; 
+	    private String role;
 	    
 	    
 
 	 
+		public String getRole() {
+			return role;
+		}
+		public void setRole(String role) {
+			this.role = role;
+		}
 		// Getters and Setters
 	    public int getUserId() { return userId; }
 	    public void setUserId(int userId) { this.userId = userId; }

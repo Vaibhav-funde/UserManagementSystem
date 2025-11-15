@@ -61,6 +61,7 @@
 </style>
 </head>
 <body>
+<jsp:include page="Header.jsp" />
 
 <div class="container">
     <h2>Login</h2>
@@ -84,6 +85,6 @@
         New User? <a href="Register.jsp">Register Here</a>
     </div>
 </div>
-
+<jsp:include page="Footer.jsp" />
 </body>
 </html>

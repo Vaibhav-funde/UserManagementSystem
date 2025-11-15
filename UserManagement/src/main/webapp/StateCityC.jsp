@@ -56,7 +56,7 @@
 </style>
 </head>
 <body>
-
+<jsp:include page="Sidebar.jsp" />
 <div class="container">
     <h2>State & City CRUD</h2>
     <a href="AddState.jsp" class="btn-link">Add State</a><br>

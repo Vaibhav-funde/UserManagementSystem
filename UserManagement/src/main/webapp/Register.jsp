@@ -60,6 +60,7 @@
 </style>
 </head>
 <body>
+<jsp:include page="Header.jsp" />
 
 <%
     // Instantiate DAO classes
@@ -76,32 +77,46 @@
     if (selectedStateId != null && !selectedStateId.isEmpty()) {
         cities = cityDbo.getCitiesByState(Integer.parseInt(selectedStateId));
     }
+    
+    
 %>
 
 <div class="container">
     <h2>Register</h2>
 
+<% String error = (String) request.getAttribute("error");
+       if(error != null) { %>
+       <div class="error"><%= error %></div>
+    <% } %>
+    
     <form action="RegisterServlet" method="post">
         <label>Name</label>
         <input type="text" name="name" required>
 
         <label>Email</label>
-        <input type="email" name="email" required>
+      <input type="email" name="email" required
+       pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org)$"
+       title="Enter a valid email like user@gmail.com, user@yahoo.com">
 
         <label>Mobile</label>
         <input type="text" name="mobile" required pattern="[0-9]{10}" title="Enter valid 10-digit mobile">
 
         <label>Password</label>
-        <input type="password" name="password" required>
+        <input type="password" name="password"
+       pattern="(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}"
+       title="Password must be at least 8 characters long, include one uppercase letter, one number, and one special symbol."
+       required>
 
         <label>State</label>
         <select name="state" onchange="this.form.submit()" required>
             <option value="">-- Select State --</option>
-            <% for (State s : states) { %>
+            <% for (State s : states) { 
+            %>
                 <option value="<%= s.getSid() %>" <%= (selectedStateId != null && s.getSid() == Integer.parseInt(selectedStateId)) ? "selected" : "" %>>
                     <%= s.getSname() %>
                 </option>
-            <% } %>
+            <%
+            } %>
         </select>
 
         <label>City</label>
@@ -120,5 +135,6 @@
     </div>
 </div>
 
+<jsp:include page="Footer.jsp" />
 </body>
 </html>

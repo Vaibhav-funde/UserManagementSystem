@@ -19,14 +19,48 @@
 <meta charset="UTF-8">
 <title>Update City</title>
 <style>
-    body { font-family: Arial; background: #f5f7fa; }
-    .container { width: 400px; margin: 80px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; }
-    label { display: block; margin-top: 10px; }
-    input, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
-    input[type=submit] { background: #28a745; color: white; border: none; margin-top: 15px; cursor: pointer; }
-    input[type=submit]:hover { background: #218838; }
-    a { display: block; margin-top: 10px; text-align: center; text-decoration: none; color: #007bff; }
+    body { 
+    font-family: Arial; 
+    background: #f5f7fa;
+     }
+    .container { 
+    width: 400px;
+     margin: 80px auto;
+     background: white;
+      padding: 20px;
+     border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+       }
+    h2 {
+     text-align: center; 
+     }
+    label { 
+    display: block; 
+    margin-top: 10px;
+     }
+    input, select { 
+    width: 100%;
+     padding: 8px;
+      margin-top: 5px; 
+     border: 1px solid #ccc; 
+     border-radius: 5px;
+      }
+    input[type=submit] {
+     background: #28a745;
+      color: white; 
+      border: none;
+      margin-top: 15px;
+      cursor: pointer; 
+      }
+    input[type=submit]:hover {
+     background: #218838;
+      }
+    a { 
+    display: block;
+     margin-top: 10px;
+      text-align: center; 
+      text-decoration: none;
+      color: #007bff; }
     .back{
     background: blue;
     color:white;
@@ -39,6 +73,7 @@
 </style>
 </head>
 <body>
+<jsp:include page="Sidebar.jsp" />
 <div class="container">
     <h2  class="update">Update City</h2>
     <form action="UpdateCityServlet" method="post">
